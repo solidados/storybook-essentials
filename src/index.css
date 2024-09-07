@@ -14,7 +14,7 @@ body {
   font-style: 400;
   color: #333;
   font-size: 16px;
-  background-color: #26c6da;
+  background-color: #f0e4c3;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -154,7 +154,7 @@ textarea {
   height: 0.85em;
   transform: translate3d(-50%, -50%, 0);
   background: transparent;
-  box-shadow: #2cc5d2 0 0 0 1px inset;
+  box-shadow: #f4a366 0 0 0 1px inset;
   content: "";
   display: block;
 }
@@ -332,7 +332,7 @@ textarea {
 }
 
 .list-item:hover {
-  background-image: linear-gradient(to bottom, #e5f9f7 0%, #f0fffd 100%);
+  background-image: linear-gradient(to left, #fbfffe 0%, #e8f4f3 100%);
 }
 
 .list-item:hover .checkbox {
