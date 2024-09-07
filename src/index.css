@@ -14,7 +14,7 @@ body {
   font-style: 400;
   color: #333;
   font-size: 16px;
-  background-color: #f0e4c3;
+  background-color: #2cc5d2;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -332,7 +332,7 @@ textarea {
 }
 
 .list-item:hover {
-  background-image: linear-gradient(to left, #fbfffe 0%, #e8f4f3 100%);
+  background-image: linear-gradient(to left, #ffffff 0%, #e8fffd 100%);
 }
 
 .list-item:hover .checkbox {
