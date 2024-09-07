@@ -16,8 +16,8 @@ const Task: FC<TaskProps> = ({ task: { id, title, state }, onArchiveTask, onPinT
       <label htmlFor={`title-${id}`} area-label={title}>
         <input type="text" value={title} readOnly={true} name={title} id={`title-${id}`} />
       </label>
-      <button onClick={() => onArchiveTask(id)}>Archive</button>
-      <button onClick={() => onPinTask(id)}>Pin</button>
+      <button onClick={(): void => onArchiveTask(id)}>Archive</button>
+      <button onClick={(): void => onPinTask(id)}>Pin</button>
     </div>
   );
 }
