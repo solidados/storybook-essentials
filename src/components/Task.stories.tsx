@@ -13,7 +13,10 @@ const meta: Meta<typeof Task> = {
   component: Task,
   tags: ['autodocs'],
   excludeStories: /.*Data$/,
-  argTypes: {},
+  argTypes: {
+    onArchiveTask: { table: { disable: true } },
+    onPinTask: { table: { disable: true } }
+  },
   args: {
     ...ActionsData,
   },
