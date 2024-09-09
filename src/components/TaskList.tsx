@@ -14,7 +14,7 @@ interface TaskListProps {
   onArchiveTask: (id: string) => void,
 }
 
-const TaskList: React.FC<TaskListProps> = ({ loading, tasks, onPinTask, onArchiveTask }) => {
+const TaskList: React.FC<TaskListProps> = ({ loading = false, tasks, onPinTask, onArchiveTask }): React.ReactElement => {
   const events = {
     onPinTask,
     onArchiveTask
@@ -33,7 +33,7 @@ const TaskList: React.FC<TaskListProps> = ({ loading, tasks, onPinTask, onArchiv
     <div className='list-items' data-testid="loading" key={'loading'}>
       {Array(tasks.length || 6)
         .fill(0)
-        .map((_, index) => (
+        .map((_, index: number): React.ReactNode => (
           <div key={index}>{LoadingRow}</div>
         ))
       }
@@ -57,7 +57,7 @@ const TaskList: React.FC<TaskListProps> = ({ loading, tasks, onPinTask, onArchiv
 
   return (
     <div className="list-items">
-      {tasksInOrder.map((task) => (
+      {tasksInOrder.map((task): React.ReactNode => (
         <Task key={task.id} task={task} {...events} />
       ))}
     </div>
