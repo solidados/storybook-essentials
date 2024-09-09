@@ -1,3 +1,5 @@
+import { SerializedError } from "@reduxjs/toolkit";
+
 export interface ITask {
   id: string;
   title: string;
@@ -19,6 +21,6 @@ export interface ITaskListProps {
 
 export interface ITaskBoxData {
   tasks: ITask[];
-  status: 'idle' | 'loading' | 'success' | 'error';
-  error: Error | null;
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  error: SerializedError | null;
 }
