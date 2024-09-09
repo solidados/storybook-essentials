@@ -1,9 +1,9 @@
 import { ReactElement, useEffect } from "react"
 import { useSelector } from "react-redux"
-import { useAppDispatch } from "lib/hooks"
-import { fetchTasks, RootState } from "lib/store"
-import { ITaskBoxData } from "components/types"
-import TaskList from "components/TaskList"
+import { useAppDispatch } from "../lib/hooks"
+import { fetchTasks, RootState } from "../lib/store"
+import { ITaskBoxData } from "./types"
+import TaskList from "./TaskList"
 
 const InboxScreen = (): ReactElement => {
   const dispatch = useAppDispatch()
