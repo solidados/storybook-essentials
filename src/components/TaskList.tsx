@@ -1,23 +1,43 @@
 import React from 'react';
 import Task from './Task'
 
-export interface Task {
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState, ITaskBoxData, updateTaskState } from '../lib/store';
+
+export interface ITask {
   id: string;
   title: string;
-  state: string;
+  state: 'TASK_INBOX' | 'TASK_PINNED' | 'TASK_ARCHIVED';
 }
 
 interface TaskListProps {
   loading: boolean,
-  tasks: Task[],
+  tasks: ITask[],
   onPinTask: (id: string) => void,
   onArchiveTask: (id: string) => void,
 }
 
-const TaskList: React.FC<TaskListProps> = ({ loading = false, tasks, onPinTask, onArchiveTask }): React.ReactElement => {
-  const events = {
-    onPinTask,
-    onArchiveTask
+const TaskList: React.FC<TaskListProps> = (): React.ReactElement => {
+  const tasks = useSelector((state: RootState): ITask[] => {
+    const tasksInOrder = [
+      ...state.taskbox.tasks.filter((task): boolean => task.state === "TASK_PINNED"),
+      ...state.taskbox.tasks.filter((task): boolean => task.state !== "TASK_PINNED"),
+    ]
+    const filteredTasks = tasksInOrder.filter(task => task.state === 'TASK_INBOX' || task.state === 'TASK_PINNED')
+
+    return filteredTasks
+  })
+
+  const { status } = useSelector((state: RootState): ITaskBoxData => state.taskbox)
+
+  const dispatch: AppDispatch = useDispatch()
+
+  const pinTask = (value: string): void => {
+    dispatch(updateTaskState({ id: value, newTaskState: 'TASK_PINNED' }))
+  }
+
+  const archiveTask = (value: string): void => {
+    dispatch(updateTaskState({ id: value, newTaskState: 'TASK_ARCHIVED' }))
   }
 
   const LoadingRow = (
@@ -29,7 +49,7 @@ const TaskList: React.FC<TaskListProps> = ({ loading = false, tasks, onPinTask, 
     </div>
   )
 
-  if (loading) return (
+  if (status === 'loading') {
     <div className='list-items' data-testid="loading" key={'loading'}>
       {Array(tasks.length || 6)
         .fill(0)
@@ -38,7 +58,7 @@ const TaskList: React.FC<TaskListProps> = ({ loading = false, tasks, onPinTask, 
         ))
       }
     </div>
-  )
+  }
 
   if (tasks.length === 0) return (
     <div className='list-items' data-testid="empty" key={'empty'}>
@@ -50,15 +70,15 @@ const TaskList: React.FC<TaskListProps> = ({ loading = false, tasks, onPinTask, 
     </div>
   )
 
-  const tasksInOrder = [
-    ...tasks.filter((task): boolean => task.state === "TASK_PINNED"),
-    ...tasks.filter((task): boolean => task.state !== "TASK_PINNED"),
-  ]
-
   return (
-    <div className="list-items">
-      {tasksInOrder.map((task): React.ReactNode => (
-        <Task key={task.id} task={task} {...events} />
+    <div className="list-items" data-testid='success' key={"success"}>
+      {tasks.map((task: ITask): React.ReactNode => (
+        <Task
+          key={task.id}
+          task={task}
+          onPinTask={(task): void => pinTask(task)}
+          onArchiveTask={(task) => archiveTask(task)}
+        />
       ))}
     </div>
   );

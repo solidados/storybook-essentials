@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, ReactElement } from 'react'
 
 interface TaskProps {
   task: {
@@ -10,7 +10,7 @@ interface TaskProps {
   onPinTask: (id: string) => void
 }
 
-const Task: FC<TaskProps> = ({ task: { id, title, state }, onArchiveTask, onPinTask }) => {
+const Task: FC<TaskProps> = ({ task: { id, title, state }, onArchiveTask, onPinTask }): ReactElement => {
   return (
     <div className={`list-item ${state}`}>
       <label

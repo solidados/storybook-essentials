@@ -1,14 +1,14 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
-import { Task } from 'components/TaskList'
 import { v4 } from "uuid";
+import { ITask } from 'components/TaskList'
 
-interface ITaskBoxData {
-  tasks: Task[],
+export interface ITaskBoxData {
+  tasks: ITask[],
   status: string,
   error: Error | null
 }
 
-const defaultTasks: Task[] = [
+const defaultTasks: ITask[] = [
   { id: v4(), title: 'Something', state: 'TASK_INBOX' },
   { id: v4(), title: 'Something more', state: 'TASK_INBOX' },
   { id: v4(), title: 'Something else', state: 'TASK_INBOX' },
@@ -42,5 +42,8 @@ const store = configureStore({
     taskbox: TasksSlice.reducer
   }
 })
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
 
 export default store
