@@ -33,7 +33,7 @@ const Mockstore: React.FC<MockstoreProps> = ({ taskboxState, children }): React.
           reducers: {
             updateTaskState: (state, action: PayloadAction<{ id: string; newTaskState: ITask['state'] }>): void => {
               const { id, newTaskState } = action.payload
-              const task = state.tasks.findIndex((task) => task.id === id)
+              const task = state.tasks.findIndex((task): boolean => task.id === id)
               if (task >= 0) {
                 state.tasks[task].state = newTaskState
               }

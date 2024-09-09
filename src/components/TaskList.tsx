@@ -39,14 +39,14 @@ const TaskList: React.FC<ITaskListProps> = (): React.ReactElement => {
   )
 
   if (status === 'loading') {
-    <div className='list-items' data-testid="loading" key={'loading'}>
+    return (<div className='list-items' data-testid="loading" key={'loading'}>
       {Array(tasks.length || 6)
         .fill(0)
         .map((_, index: number): React.ReactNode => (
           <div key={index}>{LoadingRow}</div>
         ))
       }
-    </div>
+    </div>)
   }
 
   if (tasks.length === 0) return (
