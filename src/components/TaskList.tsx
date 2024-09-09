@@ -1,7 +1,7 @@
 import React from 'react';
 import Task from './Task'
 
-interface Task {
+export interface Task {
   id: string;
   title: string;
   state: string;
