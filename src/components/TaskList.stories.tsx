@@ -1,7 +1,51 @@
+import { Provider } from 'react-redux'
+import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Meta, StoryObj } from '@storybook/react/*'
 import { v4 } from 'uuid'
-import * as TaskStories from './Task.stories'
 import TaskList from './TaskList'
+import { ITaskBoxData, ITask } from './types';
+
+export const MockedState: ITaskBoxData = {
+  tasks: [
+    { id: v4(), title: 'Task 1', state: 'TASK_INBOX' },
+    { id: v4(), title: 'Task 2', state: 'TASK_INBOX' },
+    { id: v4(), title: 'Task 3', state: 'TASK_INBOX' },
+    { id: v4(), title: 'Task 4', state: 'TASK_INBOX' },
+    { id: v4(), title: 'Task 5', state: 'TASK_INBOX' },
+    { id: v4(), title: 'Task 6', state: 'TASK_INBOX' },
+  ],
+  status: 'idle',
+  error: null
+}
+
+interface MockstoreProps {
+  taskboxState: ITaskBoxData;
+  children: React.ReactNode;
+}
+
+const Mockstore: React.FC<MockstoreProps> = ({ taskboxState, children }): React.ReactElement => (
+  <Provider
+    store={configureStore({
+      reducer: {
+        taskbox: createSlice({
+          name: 'taskbox',
+          initialState: taskboxState,
+          reducers: {
+            updateTaskState: (state, action: PayloadAction<{ id: string; newTaskState: ITask['state'] }>): void => {
+              const { id, newTaskState } = action.payload
+              const task = state.tasks.findIndex((task) => task.id === id)
+              if (task >= 0) {
+                state.tasks[task].state = newTaskState
+              }
+            }
+          }
+        }).reducer,
+      },
+    })}
+  >
+    {children}
+  </Provider>
+)
 
 const meta: Meta<typeof TaskList> = {
   title: 'Todo/TaskList',
@@ -10,45 +54,56 @@ const meta: Meta<typeof TaskList> = {
   decorators: [
     (story) => <div style={{ margin: '3rem' }}>{story()}</div>
   ],
-  argTypes: {
-    ...TaskStories.ActionsData,
-  },
-  args: {}
+  excludeStories: /.*MockedState$/,
 }
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default = {
-  args: {
-    tasks: [
-      { ...TaskStories.Default.args.task, id: v4(), title: 'Task 1' },
-      { ...TaskStories.Default.args.task, id: v4(), title: 'Task 2' },
-      { ...TaskStories.Default.args.task, id: v4(), title: 'Task 3' },
-      { ...TaskStories.Default.args.task, id: v4(), title: 'Task 4' },
-      { ...TaskStories.Default.args.task, id: v4(), title: 'Task 5' },
-      { ...TaskStories.Default.args.task, id: v4(), title: 'Task 6' },
-    ]
-  }
+export const Default: Story = {
+  decorators: [
+    (story) => <Mockstore taskboxState={MockedState}>{story()}</Mockstore>
+  ]
 }
 
-export const WithPinnedTasks = {
-  args: {
-    tasks: Default.args.tasks.map(task => task.title === 'Task 6' ? { title: 'Task 6 (pinned)', state: 'TASK_PINNED' } : task
+export const WithPinnedTasks: Story = {
+  decorators: [
+    (story) => {
+      const pinnedtasks: ITask[] = MockedState.tasks.map((task) =>
+        task.title === 'Task 6'
+          ? { ...task, title: 'Task 6 (pinned)', state: 'TASK_PINNED' }
+          : task
+      );
+
+      return (
+        <Mockstore taskboxState={{ ...MockedState, tasks: pinnedtasks }}>
+          {story()}
+        </Mockstore>
+      );
+    },
+  ],
+};
+
+export const Loading: Story = {
+  decorators: [
+    (story) => (
+      <Mockstore
+        taskboxState={{ ...MockedState, status: 'loading' }}
+      >
+        {story()}
+      </Mockstore>
     ),
-  }
-}
+  ],
+};
 
-export const Loading = {
-  args: {
-    tasks: [],
-    loading: true
-  }
-}
-
-export const Empty = {
-  args: {
-    ...Loading.args,
-    loading: false
-  }
-}
+export const Empty: Story = {
+  decorators: [
+    (story) => (
+      <Mockstore
+        taskboxState={{ ...MockedState, tasks: [] }}
+      >
+        {story()}
+      </Mockstore>
+    ),
+  ],
+};

@@ -1,16 +1,7 @@
 import { FC, ReactElement } from 'react'
+import { ITaskProps } from 'components/types';
 
-interface TaskProps {
-  task: {
-    id: string,
-    title: string,
-    state: string
-  },
-  onArchiveTask: (id: string) => void,
-  onPinTask: (id: string) => void
-}
-
-const Task: FC<TaskProps> = ({ task: { id, title, state }, onArchiveTask, onPinTask }): ReactElement => {
+const Task: FC<ITaskProps> = ({ task: { id, title, state }, onArchiveTask, onPinTask }): ReactElement => {
   return (
     <div className={`list-item ${state}`}>
       <label

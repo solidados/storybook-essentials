@@ -1,7 +1,8 @@
-import { Meta, StoryObj } from '@storybook/react/*'
+import { Meta, StoryObj } from '@storybook/react'
 import { fn } from '@storybook/test'
-import Task from './Task'
 import { v4 } from 'uuid';
+import Task from './Task'
+import { ITask } from './types';
 
 export const ActionsData = {
   onArchiveTask: fn(),
@@ -26,30 +27,36 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const Default = {
+export const Default: Story = {
   args: {
     task: {
       id: v4(),
       title: 'Test Task',
-      state: 'TASK_INBOX',
-    }
+      state: 'TASK_INBOX' as ITask['state'],
+    },
+    onArchiveTask: ActionsData.onArchiveTask,
+    onPinTask: ActionsData.onPinTask,
   }
 }
 
-export const Pinned = {
+export const Pinned: Story = {
   args: {
     task: {
-      ...Default.args.task,
-      state: 'TASK_PINNED',
-    }
-  }
-}
+      ...Default.args?.task ?? { id: v4(), title: 'Pinned Task', state: 'TASK_PINNED' },
+      state: 'TASK_PINNED' as ITask['state'],
+    },
+    onArchiveTask: ActionsData.onArchiveTask,
+    onPinTask: ActionsData.onPinTask,
+  },
+};
 
-export const Archived = {
+export const Archived: Story = {
   args: {
     task: {
-      ...Default.args.task,
-      state: 'TASK_ARCHIVED',
-    }
-  }
-}
+      ...Default.args?.task ?? { id: v4(), title: 'Archived Task', state: 'TASK_ARCHIVED' },
+      state: 'TASK_ARCHIVED' as ITask['state'],
+    },
+    onArchiveTask: ActionsData.onArchiveTask,
+    onPinTask: ActionsData.onPinTask,
+  },
+};

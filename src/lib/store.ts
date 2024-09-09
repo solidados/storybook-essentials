@@ -1,12 +1,6 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ITask, ITaskBoxData } from "components/types";
 import { v4 } from "uuid";
-import { ITask } from 'components/TaskList'
-
-export interface ITaskBoxData {
-  tasks: ITask[],
-  status: string,
-  error: Error | null
-}
 
 const defaultTasks: ITask[] = [
   { id: v4(), title: 'Something', state: 'TASK_INBOX' },
@@ -25,7 +19,7 @@ const TasksSlice = createSlice({
   name: 'taskbox',
   initialState: TaskBoxData,
   reducers: {
-    updateTaskState: (state, action) => {
+    updateTaskState: (state, action: PayloadAction<{id: string, newTaskState: ITask['state']}>) => {
       const { id, newTaskState } = action.payload
       const task = state.tasks.findIndex((task) => task.id === id)
       if (task >= 0) {

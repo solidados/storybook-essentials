@@ -1,27 +1,16 @@
 import React from 'react';
-import Task from './Task'
-
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState, ITaskBoxData, updateTaskState } from '../lib/store';
 
-export interface ITask {
-  id: string;
-  title: string;
-  state: 'TASK_INBOX' | 'TASK_PINNED' | 'TASK_ARCHIVED';
-}
+import { AppDispatch, RootState, updateTaskState } from '../lib/store';
+import { ITaskListProps, ITaskBoxData, ITask } from './types';
 
-interface TaskListProps {
-  loading: boolean,
-  tasks: ITask[],
-  onPinTask: (id: string) => void,
-  onArchiveTask: (id: string) => void,
-}
+import Task from './Task';
 
-const TaskList: React.FC<TaskListProps> = (): React.ReactElement => {
+const TaskList: React.FC<ITaskListProps> = (): React.ReactElement => {
   const tasks = useSelector((state: RootState): ITask[] => {
     const tasksInOrder = [
-      ...state.taskbox.tasks.filter((task): boolean => task.state === "TASK_PINNED"),
-      ...state.taskbox.tasks.filter((task): boolean => task.state !== "TASK_PINNED"),
+      ...state.taskbox.tasks.filter((task: ITask): boolean => task.state === "TASK_PINNED"),
+      ...state.taskbox.tasks.filter((task: ITask): boolean => task.state !== "TASK_PINNED"),
     ]
     const filteredTasks = tasksInOrder.filter(task => task.state === 'TASK_INBOX' || task.state === 'TASK_PINNED')
 
@@ -32,12 +21,12 @@ const TaskList: React.FC<TaskListProps> = (): React.ReactElement => {
 
   const dispatch: AppDispatch = useDispatch()
 
-  const pinTask = (value: string): void => {
-    dispatch(updateTaskState({ id: value, newTaskState: 'TASK_PINNED' }))
+  const pinTask = (id: string): void => {
+    dispatch(updateTaskState({ id, newTaskState: 'TASK_PINNED' }))
   }
 
-  const archiveTask = (value: string): void => {
-    dispatch(updateTaskState({ id: value, newTaskState: 'TASK_ARCHIVED' }))
+  const archiveTask = (id: string): void => {
+    dispatch(updateTaskState({ id, newTaskState: 'TASK_ARCHIVED' }))
   }
 
   const LoadingRow = (
@@ -77,7 +66,7 @@ const TaskList: React.FC<TaskListProps> = (): React.ReactElement => {
           key={task.id}
           task={task}
           onPinTask={(task): void => pinTask(task)}
-          onArchiveTask={(task) => archiveTask(task)}
+          onArchiveTask={(task): void => archiveTask(task)}
         />
       ))}
     </div>
