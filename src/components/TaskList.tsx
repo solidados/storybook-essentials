@@ -2,11 +2,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, RootState, updateTaskState } from '../lib/store';
-import { ITaskListProps, ITaskBoxData, ITask } from './types';
+import { ITaskBoxData, ITask } from './types';
 
 import Task from './Task';
 
-const TaskList: React.FC<ITaskListProps> = (): React.ReactElement => {
+const TaskList = (): React.ReactElement => {
   const tasks = useSelector((state: RootState): ITask[] => {
     const tasksInOrder = [
       ...state.taskbox.tasks.filter((task: ITask): boolean => task.state === "TASK_PINNED"),
