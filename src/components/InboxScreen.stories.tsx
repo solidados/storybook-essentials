@@ -21,10 +21,20 @@ export const Default = {
     msw: {
       handlers: [
         http.get('https://jsonplaceholder.typicode.com/todos?userId=1', () => {
+          return HttpResponse.json(MockedState.tasks);
+        })
+      ]
+    }
+  }
+}
+export const Error = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('https://jsonplaceholder.typicode.com/todos?userId=1', () => {
           return new HttpResponse(null, { status: 403 })
         })
       ]
     }
   }
 }
-export const Error = {}
